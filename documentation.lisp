@@ -3,7 +3,7 @@
 
 (in-package :trivial-timer)
 
-(defsection @trivial-timer-manual (:title "Trivial Object Lock Manual")
+(defsection @trivial-timer-manual (:title "Trivial Timer Manual")
   "[![pipeline status](https://gitlab.com/ediethelm/trivial-timer/badges/master/pipeline.svg)](https://gitlab.com/ediethelm/trivial-timer/commits/master)"
   (@trivial-timer-description section)
   (@trivial-timer-installing section)
