@@ -26,8 +26,8 @@
 (proclaim '(ftype (function () null) timer-process))
 
 (proclaim '(ftype (function () null) initialize-timer))
-(proclaim '(ftype (function ((unsigned-byte 62) function) null) register-timer-call))
-(proclaim '(ftype (function ((unsigned-byte 62) function) null) register-timer-recurring-call))
+(proclaim '(ftype (function ((unsigned-byte 62) function) boolean) register-timer-call))
+(proclaim '(ftype (function ((unsigned-byte 62) function) boolean) register-timer-recurring-call))
 
 (defvar *timer-thread* nil)
 (defvar *thread-pool-size* 4)
@@ -35,8 +35,10 @@
 (defvar *call-queue* nil)
 (defvar *call-queue-lock* (bordeaux-threads:make-lock "call-queue"))
 (defvar *ms-to-ticks* (/ 1000 internal-time-units-per-second))
-(defvar *ms-tolerance* 10 "Time tolerance (+/- 10ms)")
+(defvar *ms-tolerance* 10 "Time tolerance (default +/- 10ms)")
 (defvar *ticks-tolerance* (* *ms-to-ticks* *ms-tolerance*))
+(defvar *timer-initialized* nil)
+(defvar *shutdown-requested* nil)
 
 (defun thread-free? (thread)
   (declare (type ThreadPool-Thread thread))
@@ -78,6 +80,7 @@
   (loop
      ;; Identify calls within +/- *ticks-tolerance* from now
      ;; @TODO QoS: Could use a sorted list to prioritize handling of calls by time
+     until *shutdown-requested*
      do (let* ((upper (+ (get-internal-real-time) *ticks-tolerance*))
 	       (calls
 		;; @TODO What would be the consequence of NOT locking??
@@ -111,45 +114,72 @@
 		      (declare (type (unsigned-byte 62) execution-time))
 		      
 		      (when (> 0 (- (coerce (+ (the (unsigned-byte 62) (first call)) *ticks-tolerance*) 'fixnum) execution-time))
-			(log:warn "A call was started too late (~a ms)."
+			(log:warn "A call was started too late (~a ms delay)."
 				  (/ (- (first call) execution-time)
 				     *ms-to-ticks*)))))))))
        
-       (sleep (/ *ms-tolerance* 1000))))
+       (sleep (/ *ms-tolerance* 1000)))
+  
+  (log:info "trivial-timer stopped.")
+  (setf *timer-initialized* nil))
 
 
 (defun initialize-timer ()
-  ""
+  "Initialization of trivial-timer. This **MUST** be called before any other function from this library."
+  (when *timer-initialized*
+    (log:error "trivial-timer was already initialized. Ignoring additional initialization.")
+    (return-from initialize-timer nil))
+  
+  (setf *shutdown-requested* nil)
   (dotimes (n *thread-pool-size*)
     (push (make-thread-pool-thread) *thread-pool*))
 
-  (setf *timer-thread* (bordeaux-threads:make-thread #'timer-process :name "Timer thread"))
+  (setf *timer-thread* (bordeaux-threads:make-thread #'timer-process :name "Trivial-Timer-Thread"))
+  (setf *timer-initialized* t)
   nil)
 
-(defun stop-timer ()
-  ""
-  )
+(defun shutdown-timer ()
+  "Shutdown the timer. No further calls can be registered. Atention: Stopping is an asynchronous request, meaning that some registered call might still be executed after calling *shutdown-timer*"
+	(unless *timer-initialized*
+    (log:error "trivial-timer was not initialized. Ignoring shutdown request.")
+    (return-from shutdown-timer nil))
+
+  (setf *shutdown-requested* t))
   
 (defun register-timer-call (offset call)
+  "Register a function *call* to be executed in *offset* milliseconds from now."
   (declare (type (unsigned-byte 62) offset)
-	   (type function call))
+	         (type function call))
+
+  (unless *timer-initialized*
+    (log:error "trivial-timer was not initialized. Please call initialize-timer prior to calling this function.")
+    (return-from register-timer-call nil))
   
-  (bordeaux-threads:with-lock-held (*call-queue-lock*)
-    (push (list (+ (the (unsigned-byte 64) (* *ms-to-ticks* offset)) (get-internal-real-time)) call) *call-queue*))
-  nil)
+  (let ((now (get-internal-real-time)))
+    (declare (type (unsigned-byte 62) now))
+    (bordeaux-threads:with-lock-held (*call-queue-lock*)
+      (push (list (+ (the (unsigned-byte 64) (* *ms-to-ticks* offset)) now) #'(lambda () (funcall call now offset))) *call-queue*)))
+  (return-from register-timer-call t))
 
 ;; How to implement a recurring timer call?
 ;; Get an call ID to stop it later.
 ;; (cancel-timer-recurring-call (register-timer-recurring-call ...)) 
 
 (defun register-timer-recurring-call (offset call)
+  "Register a function *call* to be (recurrently) executed every *offset* milliseconds."
   (declare (type (unsigned-byte 62) offset)
-	   (type function call))
-  (bordeaux-threads:with-lock-held (*call-queue-lock*)
-    (push (list (+ (* *ms-to-ticks* offset) (get-internal-real-time))
-		(lambda () (progn
-			     ;;(register-timer-recurring-call offset call)
-			     (funcall call))))
-	  *call-queue*))
-  nil)
+	         (type function call))
 
+  (unless *timer-initialized*
+    (log:error "trivial-timer was not initialized. Please call initialize-timer prior to calling this function.")
+    (return-from register-timer-recurring-call nil))
+  
+  (let ((now (get-internal-real-time)))
+    (declare (type (unsigned-byte 62) now))
+    (bordeaux-threads:with-lock-held (*call-queue-lock*)
+      (push (list (+ (* *ms-to-ticks* offset) (get-internal-real-time))
+		  (lambda () (progn
+			       ;;(register-timer-recurring-call offset call)
+			       (funcall call now offset))))
+	    *call-queue*)))
+  (return-from register-timer-recurring-call t))

@@ -31,7 +31,7 @@ After the files are copied, we can use [QuickLisp](https://www.quicklisp.org/bet
 (initialize-timer)
 
 (defun timer-callback (registered-time delay)
-  (log:info "I was called by the timer ~a ms after registration. Expected was ~a ms." 
+  (log:info "I was called by the timer ~a ms after registration. Expected was ~a ms."
     (- (get-internal-real-time) registered-time) delay))
 
 (let ((delay 1000))
@@ -43,6 +43,25 @@ After the files are copied, we can use [QuickLisp](https://www.quicklisp.org/bet
 
 ## Exported Symbols
 
+- [variable] *MS-TOLERANCE* 10
+
+    Time tolerance (default +/- 10ms)
+
+- [function] INITIALIZE-TIMER 
+
+    Initialization of trivial-timer. This **MUST** be called before any other function from this library.
+
+- [function] SHUTDOWN-TIMER 
+
+    Shutdown the timer. No further calls can be registered. Atention: Stopping is an asynchronous request, meaning that some registered call might still be executed after calling *shutdown-timer*
+
+- [function] REGISTER-TIMER-CALL OFFSET CALL
+
+    Register a function *call* to be executed in *offset* milliseconds from now.
+
+- [function] REGISTER-TIMER-RECURRING-CALL OFFSET CALL
+
+    Register a function *call* to be (recurrently) executed every *offset* milliseconds.
 
 ## License Information
 

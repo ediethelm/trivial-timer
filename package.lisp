@@ -1,8 +1,9 @@
 (mgl-pax:define-package #:trivial-timer
-  (:documentation "")
+  (:documentation "Trivial Timer allows for easy scheduling of tasks (functions). The default tolerance is +- 10ms as defined by *\*ms-tolerance\**.")
   (:use #:common-lisp #:mgl-pax)
   (:export #:initialize-timer
-	   #:stop-timer
+	   #:shutdown-timer
 	   #:register-timer-call
-	   #:register-timer-recurring-call))
+	   #:register-timer-recurring-call
+     #:*ms-tolerance*))
 

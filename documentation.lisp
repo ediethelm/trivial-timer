@@ -14,7 +14,7 @@
 
 
 (defsection @trivial-timer-description (:title "Description")
-  "Trivial Timer allows for easy scheduling of tasks (functions). The default tolerance is +- 10ms as defined by *\*ms-tolerance\**.")
+  "Trivial Timer allows for easy scheduling of tasks (functions). The default tolerance is +- 10ms as defined by *\\*ms-tolerance\\**.")
 
 (defsection @trivial-timer-installing (:title "Installing trivial-timer")
     "Since this project is not yet available in the latest [QuickLisp](https://www.quicklisp.org/beta/ \"QuickLisp\") distribution, it has to be copied to your local-projects folder:
@@ -48,7 +48,10 @@ After the files are copied, we can use [QuickLisp](https://www.quicklisp.org/bet
 ")
 
 (defsection @trivial-timer-exported (:title "Exported Symbols")
-  )
+  (initialize-timer function)
+	(shutdown-timer function)
+	(register-timer-call function)
+	(register-timer-recurring-call function))
 
 (defsection @trivial-timer-license (:title "License Information")
   "This library is released under the MIT License. Please refer to the [LICENSE](https://gitlab.com/ediethelm/trivial-timer/blob/master/LICENSE 'License') to get the full licensing text.")
