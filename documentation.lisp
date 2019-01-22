@@ -14,13 +14,38 @@
 
 
 (defsection @trivial-timer-description (:title "Description")
-  "")
+  "Trivial Timer allows for easy scheduling of tasks (functions). The default tolerance is +- 10ms as defined by *\*ms-tolerance\**.")
 
 (defsection @trivial-timer-installing (:title "Installing trivial-timer")
-  "")
+    "Since this project is not yet available in the latest [QuickLisp](https://www.quicklisp.org/beta/ \"QuickLisp\") distribution, it has to be copied to your local-projects folder:
+
+```bash
+cd $HOME/quicklisp/local-projects
+git clone https://gitlab.com/ediethelm/trivial-timer.git
+```
+
+After the files are copied, we can use [QuickLisp](https://www.quicklisp.org/beta/ \"QuickLisp\") to load trivial-timer:
+
+```lisp
+(ql:quickload :trivial-timer)
+```
+")
 
 (defsection @trivial-timer-example (:title "Working Example")
-  "")
+  "```lisp
+(in-package :trivial-timer)
+(initialize-timer)
+
+(defun timer-callback (registered-time delay)
+  (log:info \"I was called by the timer ~a ms after registration. Expected was ~a ms.\"
+    (- (get-internal-real-time) registered-time) delay))
+
+(let ((delay 1000))
+  (register-timer-call delay #'timer-callback))
+
+=> I was called by the timer 992 ms after registration. Expected was 1000 ms.
+```
+")
 
 (defsection @trivial-timer-exported (:title "Exported Symbols")
   )
