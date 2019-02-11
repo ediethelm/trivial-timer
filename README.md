@@ -2,6 +2,7 @@
 
 ###### \[in package TRIVIAL-TIMER\]
 [![pipeline status](https://gitlab.com/ediethelm/trivial-timer/badges/master/pipeline.svg)](https://gitlab.com/ediethelm/trivial-timer/commits/master)
+[![Quicklisp](http://quickdocs.org/badge/trivial-timer.svg)](http://quickdocs.org/trivial-timer/)
 
 ## Description
 
@@ -10,14 +11,7 @@ Trivial Timer allows for easy scheduling of tasks (functions). The default toler
 
 ## Installing trivial-timer
 
-Since this project is not yet available in the latest [QuickLisp](https://www.quicklisp.org/beta/ "QuickLisp") distribution, it has to be copied to your local-projects folder:
-
-```bash
-cd $HOME/quicklisp/local-projects
-git clone https://gitlab.com/ediethelm/trivial-timer.git
-```
-
-After the files are copied, we can use [QuickLisp](https://www.quicklisp.org/beta/ "QuickLisp") to load trivial-timer:
+This project is available in the latest [QuickLisp](https://www.quicklisp.org/beta/ "QuickLisp") distribution, so installing it is reduced to calling:
 
 ```lisp
 (ql:quickload :trivial-timer)
