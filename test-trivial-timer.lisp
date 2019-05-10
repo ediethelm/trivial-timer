@@ -12,11 +12,10 @@
   (log:config :sane2 :this-console)
   (setf *messured-delay* nil)
   (let ((now (get-internal-real-time))
-	(delay 1000))
+       (delay 1000))
     (register-timer-call delay #'(lambda () (timer-callback now delay)))
 
     (sleep 2)
 
     (log:info *messured-delay*)
-    (5am:is (< (- delay *ms-tolerance*) *messured-delay* (+ delay *ms-tolerance*)))
-  )
+    (5am:is (< (- delay *ms-tolerance*) *messured-delay* (+ delay *ms-tolerance*)))))
