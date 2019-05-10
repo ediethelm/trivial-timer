@@ -4,7 +4,9 @@
 (in-package :trivial-timer)
 
 (defsection @trivial-timer-manual (:title "Trivial Timer Manual")
-  "[![pipeline status](https://gitlab.com/ediethelm/trivial-timer/badges/master/pipeline.svg)](https://gitlab.com/ediethelm/trivial-timer/commits/master)"
+  "[![pipeline status](https://gitlab.com/ediethelm/trivial-timer/badges/master/pipeline.svg)](https://gitlab.com/ediethelm/trivial-timer/commits/master)
+[![Quicklisp](http://quickdocs.org/badge/trivial-timer.svg)](http://quickdocs.org/trivial-timer/)
+[![coverage report](https://gitlab.com/ediethelm/trivial-timer/badges/master/coverage.svg?job=test-coverage)](https://gitlab.com/ediethelm/trivial-timer/-/jobs/artifacts/master/browse?job=test-coverage)"
   (@trivial-timer-description section)
   (@trivial-timer-installing section)
   (@trivial-timer-example section)

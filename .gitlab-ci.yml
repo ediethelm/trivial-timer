@@ -2,12 +2,14 @@ image: daewok/lisp-devel
 
 stages:
   - build
+  - test
 
 before_script:
   - apt-get update -qy
   - apt-get install -y git-core
   - cp -r /builds/ediethelm/trivial-timer ~/quicklisp/local-projects/trivial-timer
   - git clone https://gitlab.com/ediethelm/trivial-utilities.git ~/quicklisp/local-projects/trivial-utilities
+  - git clone https://gitlab.com/ediethelm/trivial-coverage.git ~/quicklisp/local-projects/trivial-coverage
 
 
 sbcl-build:
@@ -24,3 +26,22 @@ ccl-build:
                                            (uiop:quit 1))))
                     (ql:quickload :trivial-timer))"
 
+test-coverage:
+  stage: test
+  coverage: '/Test Coverage: (\d+\.\d+)%/'
+  script:
+    - sbcl --non-interactive --eval "(progn 
+                                       (ql:quickload :trivial-coverage)
+                                       (ql:quickload :trivial-timer/test)
+                                       (uiop:symbol-call :trivial-coverage
+                                         '#:test-and-print-coverage
+                                         :trivial-timer
+                                         :exclude '(\"test-trivial-timer.lisp\" 
+                                                    \"documentation.lisp\"
+                                                    \"package.lisp\")
+                                         :keep-report t))"
+  after_script:
+    - cp -r ~/quicklisp/local-projects/trivial-timer/coverage-report /builds/ediethelm/trivial-timer/coverage-report
+  artifacts:
+    paths:
+      - coverage-report/
