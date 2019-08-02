@@ -9,7 +9,6 @@
 
 Trivial Timer allows for easy scheduling of tasks (functions). The default tolerance is +- 10ms as defined by *\*ms-tolerance\**.
 
-
 ## Installing trivial-timer
 
 This project is available in the latest [QuickLisp](https://www.quicklisp.org/beta/ "QuickLisp") distribution, so installing it is reduced to calling:

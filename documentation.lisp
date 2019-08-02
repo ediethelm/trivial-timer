@@ -19,14 +19,7 @@
   "Trivial Timer allows for easy scheduling of tasks (functions). The default tolerance is +- 10ms as defined by *\\*ms-tolerance\\**.")
 
 (defsection @trivial-timer-installing (:title "Installing trivial-timer")
-    "Since this project is not yet available in the latest [QuickLisp](https://www.quicklisp.org/beta/ \"QuickLisp\") distribution, it has to be copied to your local-projects folder:
-
-```bash
-cd $HOME/quicklisp/local-projects
-git clone https://gitlab.com/ediethelm/trivial-timer.git
-```
-
-After the files are copied, we can use [QuickLisp](https://www.quicklisp.org/beta/ \"QuickLisp\") to load trivial-timer:
+    "This project is available in the latest [QuickLisp](https://www.quicklisp.org/beta/ \"QuickLisp\") distribution, so installing it is reduced to calling:
 
 ```lisp
 (ql:quickload :trivial-timer)
@@ -34,7 +27,8 @@ After the files are copied, we can use [QuickLisp](https://www.quicklisp.org/bet
 ")
 
 (defsection @trivial-timer-example (:title "Working Example")
-  "```lisp
+  "
+```lisp
 (in-package :trivial-timer)
 (initialize-timer)
 
@@ -50,13 +44,18 @@ After the files are copied, we can use [QuickLisp](https://www.quicklisp.org/bet
 ")
 
 (defsection @trivial-timer-exported (:title "Exported Symbols")
+  (*ms-tolerance* variable)
   (initialize-timer function)
-	(shutdown-timer function)
-	(register-timer-call function)
-	(register-timer-recurring-call function))
+  (shutdown-timer function)
+  (register-timer-call function)
+  (register-timer-recurring-call function))
 
 (defsection @trivial-timer-license (:title "License Information")
   "This library is released under the MIT License. Please refer to the [LICENSE](https://gitlab.com/ediethelm/trivial-timer/blob/master/LICENSE 'License') to get the full licensing text.")
 
 (defsection @trivial-timer-contributing (:title "Contributing to this project")
   "Please refer to the [CONTRIBUTING](https://gitlab.com/ediethelm/trivial-timer/blob/master/CONTRIBUTING.md 'Contributing') document for more information.")
+
+
+(trivial-utilities:make-doc-updater :trivial-timer @trivial-timer-manual)
+
