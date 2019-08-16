@@ -5,7 +5,7 @@
 (defsystem :trivial-timer
   :name "trivial-timer"
   :description "Easy scheduling of tasks (functions)."
-  :version "0.3.6"
+  :version "0.3.7"
   :author "Eric Diethelm <ediethelm@yahoo.com>"
   :licence "MIT"
   :depends-on (:trivial-utilities
@@ -13,8 +13,7 @@
 	       :bordeaux-threads
 	       :chanl
 	       :iterate)
-  :in-order-to ((test-op (test-op :trivial-timer/test))
-		(trivial-asdf-extensions:document-op (load-op :trivial-timer/document)))
+  :in-order-to ((test-op (test-op :trivial-timer/test)))
   :components ((:file "package")
 	       (:file "trivial-timer")))
 
@@ -30,8 +29,7 @@
 
 (defsystem :trivial-timer/document
   :name "trivial-timer/document"
-  :description ""
-  :version "0.3.5"
+  :description "Documentation generator for trivial-timer"
   :author "Eric Diethelm <ediethelm@yahoo.com>"
   :licence "MIT"
   :depends-on (:trivial-timer
