@@ -10,7 +10,6 @@ before_script:
   - cp -r /builds/ediethelm/trivial-timer ~/quicklisp/local-projects/trivial-timer
   - git clone https://gitlab.com/ediethelm/trivial-utilities.git ~/quicklisp/local-projects/trivial-utilities
   - git clone https://gitlab.com/ediethelm/trivial-coverage.git ~/quicklisp/local-projects/trivial-coverage
-  - git clone https://gitlab.com/ediethelm/trivial-asdf-extensions.git ~/quicklisp/local-projects/trivial-asdf-extensions
 
 
 sbcl-build:
