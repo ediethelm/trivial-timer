@@ -1,7 +1,5 @@
 ;;;; -*- Mode: Lisp; Syntax: ANSI-Common-Lisp; Base: 10 -*-
 
-(ql:quickload :trivial-asdf-extensions :silent t)
-
 (defsystem :trivial-timer
   :name "trivial-timer"
   :description "Easy scheduling of tasks (functions)."
