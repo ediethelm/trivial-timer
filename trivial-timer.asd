@@ -24,14 +24,3 @@
 	       fiveam)
   :perform (test-op (o s) (uiop:symbol-call :fiveam  '#:run! :trivial-timer-tests))
   :components ((:file "test-trivial-timer")))
-
-(defsystem :trivial-timer/document
-  :name "trivial-timer/document"
-  :description "Documentation generator for trivial-timer"
-  :author "Eric Diethelm <ediethelm@yahoo.com>"
-  :licence "MIT"
-  :depends-on (:trivial-timer
-	       :mgl-pax)
-  :perform (load-op (o s) (uiop:symbol-call :trivial-utilities '#:update-doc :trivial-timer "README.md"))
-  :components ((:file "documentation")))
-
