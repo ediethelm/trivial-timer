@@ -5,5 +5,6 @@
 	   #:shutdown-timer
 	   #:register-timer-call
 	   #:register-timer-recurring-call
+	   #:cancel-timer-call
 	   #:*ms-tolerance*))
 

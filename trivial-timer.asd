@@ -3,7 +3,7 @@
 (defsystem :trivial-timer
   :name "trivial-timer"
   :description "Easy scheduling of tasks (functions)."
-  :version "0.3.7"
+  :version "0.3.8"
   :author "Eric Diethelm <ediethelm@yahoo.com>"
   :licence "MIT"
   :depends-on (:trivial-utilities

@@ -49,13 +49,21 @@ This project is available in the latest [QuickLisp](https://www.quicklisp.org/be
 
     Shutdown the timer. No further calls can be registered. Atention: Stopping is an asynchronous request, meaning that some registered call might still be executed after calling *shutdown-timer*
 
-- [function] REGISTER-TIMER-CALL OFFSET CALL
+- [function] REGISTER-TIMER-CALL OFFSET CALL &KEY RECURRING
 
-    Register a function *call* to be executed in *offset* milliseconds from now.
+    Register a function *call* to be executed in *offset* milliseconds from now.  
+    If *recurring* is **T** then *call* will be repeated every *offset* milliseconds.  
+    Returns the ID of the registration (to be used with *cancel-timer-call*).
 
 - [function] REGISTER-TIMER-RECURRING-CALL OFFSET CALL
 
-    Register a function *call* to be (recurrently) executed every *offset* milliseconds.
+    Register a function *call* to be (recurrently) executed every *offset* milliseconds.  
+    Returns the ID of the registration (to be used with *cancel-timer-call*).
+
+- [function] CANCEL-TIMER-CALL ID
+
+    Cancel a timer call identified by *ID*.  
+    Returns **T** if the call identified by *ID* was removed.
 
 ## License Information
 
