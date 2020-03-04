@@ -11,11 +11,14 @@
 (5am:test register-timer-call
   (log:config :sane2 :this-console)
   (setf *messured-delay* nil)
-  (let ((now (get-internal-real-time))
-       (delay 1000))
-    (register-timer-call delay #'(lambda () (timer-callback now delay)))
+  (initialize-timer)
+  (unwind-protect
+       (let ((now (get-internal-real-time))
+	     (delay 1000))
+	 (register-timer-call delay #'(lambda () (timer-callback now delay)))
 
-    (sleep 2)
+	 (sleep 2)
 
-    (log:info *messured-delay*)
-    (5am:is (< (- delay *ms-tolerance*) *messured-delay* (+ delay *ms-tolerance*)))))
+	 (log:info *messured-delay*)
+	 (5am:is (< (- delay *ms-tolerance*) *messured-delay* (+ delay *ms-tolerance*))))
+    (shutdown-timer)))
